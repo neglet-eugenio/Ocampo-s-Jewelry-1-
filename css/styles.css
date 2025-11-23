@@ -1,0 +1,270 @@
+/* -------------------------GLOBAL------------------------- */
+:root{
+  --bg: #f8f9fa;
+  --text: #1f2933;
+  --accent: #0d6efd;
+  --muted: rgba(0,0,0,0.55);
+  --card-shadow: rgba(0,0,0,0.08);
+  --accent-shadow: rgba(0,0,0,0.12);
+  --zoom-shadow: rgba(0,0,0,0.35);
+}
+
+*{ box-sizing: border-box; }
+html,body{ height:100%; margin:0; font-family: "Inter", Arial, sans-serif; color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* NAVBAR */
+.navbar {
+  width: 100%;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.9);
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+.nav-left{ font-weight:700; font-size:25px; }
+.nav-right a{ margin-left:20px; text-decoration:none; color:var(--text); font-weight:600; font-size:15px; }
+
+/* -------------------------HOMEPAGE------------------------- */
+/*background image for the homepage*/
+.homepage{
+  height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(rgba(8,16,24,0.45), rgba(8,16,24,0.45)), url("https://images-aka.zales.com/hp/20251107/ZAL_3-Across_1.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px; /* extra top padding */
+}
+
+/* centered block */
+.homepage-center {
+  max-width: 920px;
+  text-align: center;
+  color: #fff;
+  padding: 48px;
+  border-radius: 12px;
+  /* subtle glass look */
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02));
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+}
+
+/* heading & text */
+.homepage-center h1{
+  font-size: clamp(28px, 4vw, 56px);
+  margin: 0 0 16px 0;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.5px;
+}
+.homepage-sub{
+  margin: 0 0 20px 0;
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.9);
+}
+
+/* buttons: pill style */
+.homepage-buttons{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+body{
+  padding-top: 80px; /* navbar was blocking top text */
+}
+.btn-primary{
+  background: #ffffff;
+  color: #111;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration:none;
+  font-weight:700;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+  border:none;
+  display:inline-block;
+}
+.btn-primary:hover{ transform: translatez(0); transition: transform .18s ease; box-shadow: 0 10px 28px rgba(0,0,0,0.18); }
+
+.btn-outline{
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 999px;
+  text-decoration:none;
+  border: 1.5px solid rgba(255,255,255,0.7);
+  font-weight:700;
+  display:inline-block;
+}
+.btn-outline:hover{ background: rgba(255,255,255,0.06); transition: background .15s ease; }
+
+/* footer */
+footer{ text-align:center; padding:20px; background:transparent; color: #666; }
+
+/* small screens adjust */
+@media (max-width: 780px){
+  .homepage { padding-top: 100px; }
+  .homepage-center { padding: 28px; text-align:center; }
+  .nav-right a{ margin-left:12px; }
+  .homepage-buttons { justify-content:center; }
+}
+
+/* ---------- Product card details + placeholder + toast ---------- */
+
+/* make parent relative so overlay can be positioned */
+.product-card { position: relative; overflow: visible; }
+
+/* DETAILS placeholder (shown before click) */
+.card-overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.85);
+  color: #333;
+  padding: 10px 18px; top: 305px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  z-index: 6;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+/* the placeholder hider */
+.product-card.revealed .card-overlay {
+  opacity: 0;
+  transform: translate(-50%, -30%);
+  pointer-events: none;
+}
+
+/* hide card details */
+.product-card .card-body {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none; /* prevents tab focus before reveal */
+}
+
+/* show details */
+.product-card.revealed .card-body {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* zoomed visual effect */
+.product-card.zoomed { transform: scale(1.06) !important; z-index: 9999; box-shadow: 0 20px 48px rgba(0,0,0,0.28) !important; }
+
+/* add-to-cart button style */
+.small-btn { z-index: 8; position: relative; }
+
+/* TOAST notification (bottom-right) */
+.toast-notification {
+  position: fixed;
+  right: 20px;
+  bottom: 22px;
+  background: rgba(30,30,30,0.95);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  font-weight: 600;
+  z-index: 200000;
+  opacity: 0;
+  transform: translateY(8px) scale(.98);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+/* visible state */
+.toast-notification.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* small tweak for keyboard focus accessibility */
+.product-card:focus { outline: 2px solid rgba(13,110,253,0.12); outline-offset: 6px; }
+
+/* -------------------------ABOUTUS------------------------- */
+/*background image for the homepage*/
+.aboutus{
+  height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(rgba(8,16,24,0.45), rgba(8,16,24,0.45)), url(https://static01.nyt.com/images/2022/04/13/t-magazine/13tmag-raymond-slide-K086/13tmag-raymond-slide-K086-videoSixteenByNineJumbo1600.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px; /* extra top padding */
+}
+
+/* centered block */
+.aboutus-center {
+  max-width: 920px;
+  text-align: left;
+  color: #fff;
+  padding: 48px;
+  border-radius: 12px;
+  /* subtle glass texture */
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02));
+  box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+}
+
+/* heading & text */
+.aboutus-center h1{
+  font-size: clamp(28px, 4vw, 56px);
+  margin: 0 0 16px 0;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.5px; 
+}
+.aboutus-sub{
+  margin: 0 0 20px 0;
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.9);
+  justify-content: center;
+}
+
+/* buttons: pill style */
+.homepage-buttons{ display:flex; gap:16px; flex-wrap:wrap; align-items:center;padding-left: 215px; }
+body{
+  padding-top: 80px; /* navbar was blocking top text */
+}
+.btn-primary{
+  background: #ffffff;
+  color: #111;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration:none;
+  font-weight:700;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+  border:none;
+  display:inline-block;
+}
+.btn-primary:hover{ transform: translatez(0); transition: transform .18s ease; box-shadow: 0 10px 28px rgba(0,0,0,0.18); }
+
+.btn-outline{
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 999px;
+  text-decoration:none;
+  border: 1.5px solid rgba(255,255,255,0.7);
+  font-weight:700;
+  display:inline-block;
+}
+.btn-outline:hover{ background: rgba(255,255,255,0.06); transition: background .15s ease; }
+
+/* footer */
+footer{ text-align:center; padding:20px; background:transparent; color: #666; }
+
+/* small screens adjust */
+@media (max-width: 780px){
+  .aboutus { padding-top: 100px; }
+  .aboutus-center { padding: 28px; text-align:center; }
+  .nav-right a{ margin-left:12px; }
+  .aboutus-buttons { justify-content:center; }
+
+}
